@@ -1311,7 +1311,9 @@ class PlayState extends MusicBeatState
 		kadeEngineWatermark.cameras = [camHUD];
 		if (loadRep)
 			replayTxt.cameras = [camHUD];
-
+                #if android
+		addAndroidControls();
+		#end
 		// if (SONG.song == 'South')
 		// FlxG.camera.alpha = 0.7;
 		// UI_camera.zoom = 1;
@@ -1386,8 +1388,8 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		if (!loadRep)
-			rep = new Replay("na");
+		/*if (!loadRep)
+			rep = new Replay("na");*/
 
 		super.create();
 	}
@@ -1505,7 +1507,11 @@ class PlayState extends MusicBeatState
 	#end
 
 	function startCountdown():Void
-	{
+	{     
+		#if android
+		androidc.visible = true;
+	        #end
+			
 		inCutscene = false;
 
 		generateStaticArrows(0);
@@ -2806,14 +2812,14 @@ class PlayState extends MusicBeatState
 
 	function endSong():Void
 	{
-		if (!loadRep)
+		/*if (!loadRep)
 			rep.SaveReplay(saveNotes);
 		else
 		{
 			FlxG.save.data.botplay = false;
 			FlxG.save.data.scrollSpeed = 1;
 			FlxG.save.data.downscroll = false;
-		}
+		}*/
 
 		if (FlxG.save.data.fpsCap > 290)
 			(cast (Lib.current.getChildAt(0), Main)).setFPSCap(290);
@@ -2887,9 +2893,10 @@ class PlayState extends MusicBeatState
 					StoryMenuState.weekUnlocked[Std.int(Math.min(storyWeek + 1, StoryMenuState.weekUnlocked.length - 1))] = true;
 
 					if (SONG.validScore)
-					{
+					{       #if newgrounds
 						NGio.unlockMedal(60961);
 						Highscore.saveWeekScore(storyWeek, campaignScore, storyDifficulty);
+					        #end
 					}
 
 					FlxG.save.data.weekUnlocked = StoryMenuState.weekUnlocked;
